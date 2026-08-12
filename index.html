@@ -759,24 +759,31 @@
       const isLeft = e.dir === "left";
       const a = anchor(from, isDown ? "bottom" : (isLeft ? "left" : "right"));
       const b = anchor(to, isDown ? "top" : (isLeft ? "right" : "left"));
-      let d;
+      let c1, c2;
       if(isDown){
         const dy = Math.max(28, (b.y-a.y)/2);
-        d = `M ${a.x} ${a.y} C ${a.x} ${a.y+dy}, ${b.x} ${b.y-dy}, ${b.x} ${b.y}`;
+        c1 = {x:a.x, y:a.y+dy}; c2 = {x:b.x, y:b.y-dy};
       } else {
         // sign inverte o sentido das curvas de controle quando o fluxo
         // volta da direita para a esquerda (segunda linha da serpentina).
         const sign = isLeft ? -1 : 1;
         const dx = Math.max(28, Math.abs(b.x-a.x)/2);
-        d = `M ${a.x} ${a.y} C ${a.x+sign*dx} ${a.y}, ${b.x-sign*dx} ${b.y}, ${b.x} ${b.y}`;
+        c1 = {x:a.x+sign*dx, y:a.y}; c2 = {x:b.x-sign*dx, y:b.y};
       }
+      const d = `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
       const path = document.createElementNS("http://www.w3.org/2000/svg","path");
       path.setAttribute("d", d);
       path.dataset.from = e.from; path.dataset.to = e.to;
       els.connectors.appendChild(path);
 
       if(e.label){
-        const mid = isDown ? {x:a.x, y:(a.y+b.y)/2} : {x:(a.x+b.x)/2, y:a.y};
+        // Ponto médio (t=0.5) da curva de Bézier cúbica real — não a média
+        // simples das âncoras — garante que o rótulo caia exatamente sobre
+        // a linha, mesmo quando a curva se curva mais para um lado.
+        const mid = {
+          x: 0.125*a.x + 0.375*c1.x + 0.375*c2.x + 0.125*b.x,
+          y: 0.125*a.y + 0.375*c1.y + 0.375*c2.y + 0.125*b.y
+        };
         const lbl = document.createElement("div");
         lbl.className = "edge-label " + (e.label==="SIM" ? "yes" : "no");
         lbl.textContent = e.label;
