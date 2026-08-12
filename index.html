@@ -38,6 +38,13 @@
     overflow:hidden;
     font-size:14px;
   }
+  /* Elementos de navegação/arraste não devem permitir seleção de texto —
+     evita o "quadrado" de seleção ao clicar/arrastar entre etapas. */
+  .topbar, .sidebar, .crumbbar, .toolbar, .canvas-viewport, .node, .panel-head,
+  .nav-item, .cchip, .tbtn, .sr-item, .p-next, .p-badge{
+    user-select:none;-webkit-user-select:none;
+  }
+  .canvas-viewport{-webkit-user-drag:none;}
   button{font-family:inherit;}
   .app{display:flex;flex-direction:column;height:100vh;}
 
@@ -122,22 +129,23 @@
 
   .crumbbar{
     flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:14px 24px;border-bottom:1px solid var(--border);
+    padding:14px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;row-gap:10px;
   }
-  .breadcrumb{font-size:12.5px;color:var(--text-faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .breadcrumb{font-size:12.5px;color:var(--text-faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;}
   .breadcrumb b{color:var(--text-dim);font-weight:600;}
   .breadcrumb .sep{color:var(--text-faint);opacity:.6;}
   .breadcrumb .current{color:var(--text);font-weight:600;}
 
-  .toolbar{display:flex;align-items:center;gap:6px;flex:none;}
+  .toolbar{display:flex;align-items:center;gap:5px;flex:none;flex-wrap:nowrap;}
   .tbtn{
-    all:unset;width:30px;height:30px;border-radius:var(--radius-s);display:flex;align-items:center;justify-content:center;
+    all:unset;width:28px;height:28px;flex:none;border-radius:var(--radius-s);display:flex;align-items:center;justify-content:center;
     color:var(--text-dim);border:1px solid var(--border);background:var(--surface);cursor:pointer;
     transition:background .15s, color .15s, border-color .15s;
+    user-select:none;-webkit-user-select:none;
   }
   .tbtn:hover{background:var(--surface-2);color:var(--text);border-color:var(--border);}
-  .tbtn.wide{width:auto;padding:0 12px;font-size:12px;font-weight:600;gap:6px;}
-  .zoom-pct{font-size:11.5px;color:var(--text-faint);font-family:ui-monospace,monospace;width:42px;text-align:center;}
+  .tbtn.wide{width:auto;padding:0 10px;font-size:11.5px;font-weight:600;gap:5px;white-space:nowrap;}
+  .zoom-pct{font-size:11px;color:var(--text-faint);font-family:ui-monospace,monospace;width:38px;text-align:center;flex:none;}
 
   /* ============ CANVAS ============ */
   .canvas-viewport{
@@ -635,17 +643,27 @@
   /* =====================================================================
      LAYOUT — conversão de grid (col,row) em pixels
      ===================================================================== */
-  const COL_W = 268, ROW_H = 172, PAD = 56;
+  const COL_W = 268, ROW_GAP = 64, PAD = 56;
   const SIZE = {
-    start:{w:200,h:52}, end:{w:200,h:52}, step:{w:216,h:118}, redirect:{w:216,h:110}, decision:{w:190,h:190}
+    start:{w:200,h:52}, end:{w:200,h:52}, step:{w:216,h:118}, redirect:{w:216,h:110}, decision:{w:184,h:184}
   };
 
+  // Layout em duas passadas: a altura de cada linha é a do maior nó daquela
+  // linha (o nó de decisão é mais alto que os demais), e as linhas seguintes
+  // só começam depois dessa altura — isso evita sobreposição entre etapas.
   function layoutNodes(proc){
+    const rowsUsed = {};
+    proc.nodes.forEach(n=>{ rowsUsed[n.row] = Math.max(rowsUsed[n.row]||0, SIZE[n.type].h); });
+    const rowKeys = Object.keys(rowsUsed).map(Number).sort((a,b)=>a-b);
+    const rowY = {};
+    let acc = PAD;
+    rowKeys.forEach(r=>{ rowY[r] = acc; acc += rowsUsed[r] + ROW_GAP; });
+
     proc.nodes.forEach(n=>{
       const s = SIZE[n.type];
       n.w = s.w; n.h = s.h;
-      n.x = PAD + n.col*COL_W + (n.type==="decision" ? (216-s.w)/2 : 0);
-      n.y = PAD + n.row*ROW_H;
+      n.x = PAD + n.col*COL_W + (216-s.w)/2;
+      n.y = rowY[n.row] + (rowsUsed[n.row]-s.h)/2;
     });
   }
   PROCESSES.forEach(layoutNodes);
@@ -854,6 +872,7 @@
   let dragging=false, dragStart={x:0,y:0}, startTxTy={x:0,y:0};
   els.viewport.addEventListener("pointerdown", (e)=>{
     if(e.target.closest(".node")) return;
+    e.preventDefault();
     dragging = true;
     els.viewport.classList.add("grabbing");
     dragStart = {x:e.clientX, y:e.clientY};
