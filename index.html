@@ -38,42 +38,41 @@
     overflow:hidden;
     font-size:14px;
   }
-  /* Elementos de navegação/arraste não devem permitir seleção de texto —
-     evita o "quadrado" de seleção ao clicar/arrastar entre etapas. */
-  .topbar, .sidebar, .crumbbar, .toolbar, .canvas-viewport, .node, .panel-head,
-  .nav-item, .cchip, .tbtn, .sr-item, .p-next, .p-badge{
+  button{font-family:inherit;}
+  .app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+
+  /* Elementos de navegação não permitem seleção de texto — evita o
+     "quadrado" de seleção ao clicar entre etapas. */
+  .topbar, .sidebar, .crumbbar, .node, .panel-head,
+  .nav-item, .cchip, .sr-item, .p-next, .p-badge, .back-btn{
     user-select:none;-webkit-user-select:none;
   }
-  .canvas-viewport{-webkit-user-drag:none;}
-  button{font-family:inherit;}
-  .app{display:flex;flex-direction:column;height:100vh;}
 
   /* ============ HEADER ============ */
   .topbar{
-    flex:none;height:64px;display:flex;align-items:center;justify-content:space-between;
+    flex:none;height:60px;display:flex;align-items:center;justify-content:space-between;
     padding:0 24px;border-bottom:1px solid var(--border);background:var(--bg-panel);
     z-index:30;
   }
   .brand{display:flex;align-items:center;gap:12px;}
   .brand .mark{
-    width:30px;height:30px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);
-    display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:13px;
+    width:28px;height:28px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:12.5px;
   }
-  .brand h1{font-size:15px;font-weight:600;letter-spacing:-.005em;line-height:1.1;margin:0;}
-  .brand .sub{font-size:11.5px;color:var(--text-faint);margin-top:1px;}
-  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .brand h1{font-size:14.5px;font-weight:600;letter-spacing:-.005em;line-height:1.1;margin:0;}
+  .brand .sub{font-size:11px;color:var(--text-faint);margin-top:1px;}
   .env-tag{
     font-size:11px;color:var(--text-faint);border:1px solid var(--border);border-radius:100px;
-    padding:4px 10px;letter-spacing:.03em;
+    padding:4px 10px;letter-spacing:.03em;flex:none;
   }
 
   /* ============ LAYOUT ============ */
-  .body-row{flex:1;display:flex;min-height:0;}
+  .body-row{flex:1;display:flex;min-height:0;overflow:hidden;}
 
   /* ============ SIDEBAR ============ */
   .sidebar{
-    flex:none;width:264px;border-right:1px solid var(--border);background:var(--bg-panel);
-    display:flex;flex-direction:column;min-height:0;
+    flex:none;width:272px;border-right:1px solid var(--border);background:var(--bg-panel);
+    display:flex;flex-direction:column;min-height:0;overflow:hidden;
   }
   .search-box{padding:16px 16px 12px;flex:none;position:relative;}
   .search-box input{
@@ -102,11 +101,11 @@
 
   .nav-label{
     font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--text-faint);
-    padding:14px 20px 8px;flex:none;
+    padding:14px 22px 8px;flex:none;
   }
-  .nav-list{flex:1;overflow-y:auto;padding:0 10px 10px;}
+  .nav-list{flex:none;padding:0 12px 6px 12px;overflow:visible;}
   .nav-item{
-    all:unset;display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:var(--radius-s);
+    all:unset;display:flex;align-items:center;gap:10px;width:100%;padding:10px 10px 10px 12px;border-radius:var(--radius-s);
     cursor:pointer;color:var(--text-dim);font-size:13px;font-weight:500;margin-bottom:2px;
     transition:background .15s, color .15s;
   }
@@ -115,90 +114,82 @@
   .nav-item .ni-dot{width:6px;height:6px;border-radius:50%;background:var(--text-faint);flex:none;}
   .nav-item.active .ni-dot{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
   .nav-item .ni-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .nav-item .ni-count{font-size:10.5px;color:var(--text-faint);font-family:ui-monospace,monospace;}
+  .nav-item .ni-count{flex:none;min-width:18px;text-align:right;font-size:10.5px;color:var(--text-faint);font-family:ui-monospace,monospace;}
   .nav-item.catalog .ni-dot{background:var(--violet);border-radius:2px;}
 
-  .sidebar-foot{flex:none;padding:14px 20px;border-top:1px solid var(--border);}
+  .sidebar-gap{flex:1;min-height:16px;}
+  .sidebar-foot{flex:none;padding:14px 22px 18px;border-top:1px solid var(--border);}
   .legend{display:flex;flex-direction:column;gap:7px;}
   .legend .lg-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--text-faint);margin-bottom:4px;}
   .legend .lg-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--text-dim);}
   .legend .lg-mark{width:12px;height:12px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--text-faint);}
 
   /* ============ MAIN ============ */
-  .main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;position:relative;}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;position:relative;overflow:hidden;}
 
   .crumbbar{
     flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:14px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;row-gap:10px;
+    padding:14px 24px;border-bottom:1px solid var(--border);
   }
   .breadcrumb{font-size:12.5px;color:var(--text-faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;}
   .breadcrumb b{color:var(--text-dim);font-weight:600;}
   .breadcrumb .sep{color:var(--text-faint);opacity:.6;}
   .breadcrumb .current{color:var(--text);font-weight:600;}
+  .scale-tag{font-size:11px;color:var(--text-faint);font-family:ui-monospace,monospace;flex:none;}
 
-  .toolbar{display:flex;align-items:center;gap:5px;flex:none;flex-wrap:nowrap;}
-  .tbtn{
-    all:unset;width:28px;height:28px;flex:none;border-radius:var(--radius-s);display:flex;align-items:center;justify-content:center;
-    color:var(--text-dim);border:1px solid var(--border);background:var(--surface);cursor:pointer;
-    transition:background .15s, color .15s, border-color .15s;
-    user-select:none;-webkit-user-select:none;
-  }
-  .tbtn:hover{background:var(--surface-2);color:var(--text);border-color:var(--border);}
-  .tbtn.wide{width:auto;padding:0 10px;font-size:11.5px;font-weight:600;gap:5px;white-space:nowrap;}
-  .zoom-pct{font-size:11px;color:var(--text-faint);font-family:ui-monospace,monospace;width:38px;text-align:center;flex:none;}
-
-  /* ============ CANVAS ============ */
+  /* ============ CANVAS — escala automática, sem arrastar/rolar ============ */
   .canvas-viewport{
     flex:1;position:relative;overflow:hidden;min-height:0;
     background:
       radial-gradient(circle at 1px 1px, rgba(255,255,255,.045) 1px, transparent 1.6px) 0 0/28px 28px;
-    cursor:grab;
   }
-  .canvas-viewport.grabbing{cursor:grabbing;}
-  .canvas-surface{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;}
+  .canvas-surface{position:absolute;left:0;top:0;transform-origin:0 0;transition:transform .25s cubic-bezier(.2,.8,.2,1);}
   svg.connectors{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;}
   svg.connectors path{
     fill:none;stroke:var(--border);stroke-width:1.6;transition:stroke .15s, stroke-width .15s, opacity .15s;
   }
   svg.connectors path.hl{stroke:var(--accent);stroke-width:2.2;}
-  svg.connectors path.dim{opacity:.25;}
-  svg.connectors marker path{stroke:none;}
+  svg.connectors path.dim{opacity:.22;}
 
   .edge-label{
-    position:absolute;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:100px;
+    position:absolute;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:100px;
     background:var(--bg-panel);border:1px solid var(--border);color:var(--text-faint);transform:translate(-50%,-50%);
     white-space:nowrap;transition:opacity .15s;
   }
   .edge-label.yes{color:var(--green);border-color:rgba(73,201,154,.35);}
   .edge-label.no{color:var(--text-dim);}
-  .edge-label.dim{opacity:.35;}
+  .edge-label.dim{opacity:.3;}
 
-  .node{
-    position:absolute;transition:box-shadow .15s, border-color .15s, opacity .15s, transform .15s;
-  }
-  .node.dim{opacity:.32;}
+  .node{position:absolute;transition:opacity .15s;}
+  .node.dim{opacity:.3;}
 
   .card{
     all:unset;display:block;width:100%;height:100%;cursor:pointer;text-align:left;
     background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);
-    padding:14px 16px;box-shadow:var(--shadow-1);position:relative;
-    transition:border-color .15s, box-shadow .15s, transform .15s, background .15s;
+    padding:11px 13px;box-shadow:var(--shadow-1);position:relative;
+    transition:border-color .15s, box-shadow .15s, background .15s;
   }
-  .card:hover{border-color:var(--border); background:var(--surface-2); box-shadow:var(--shadow-2); transform:translateY(-1px);}
+  .card:hover{border-color:var(--border); background:var(--surface-2); box-shadow:var(--shadow-2);}
   .node.selected .card{border-color:var(--accent-line); box-shadow:0 0 0 3px var(--accent-soft), var(--shadow-2);}
 
-  .card .c-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .card .c-top{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
   .card .c-icon{
-    width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;
+    width:19px;height:19px;border-radius:5px;flex:none;display:flex;align-items:center;justify-content:center;
     background:var(--surface-3);color:var(--text-faint);
   }
-  .card .c-idx{font-family:ui-monospace,monospace;font-size:11px;color:var(--text-faint);}
-  .card .c-title{font-size:13px;font-weight:700;line-height:1.3;letter-spacing:-.005em;margin-bottom:5px;}
-  .card .c-desc{font-size:11.5px;color:var(--text-dim);line-height:1.5;}
+  .card .c-idx{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--text-faint);}
+  .card .c-title{
+    font-size:12px;font-weight:700;line-height:1.28;letter-spacing:-.005em;margin-bottom:4px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .card .c-desc{
+    font-size:10.5px;color:var(--text-dim);line-height:1.42;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
   .card .c-tag{
-    display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:10px;font-weight:700;
+    display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:9px;font-weight:700;
     text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);border:1px solid var(--border);
-    border-radius:100px;padding:2px 8px;
+    border-radius:100px;padding:2px 7px;
   }
 
   .node.start .card{border-left:2px solid var(--accent);}
@@ -211,22 +202,24 @@
 
   .node.decision .card{
     background:var(--surface); border-radius:var(--radius-m); border:1px solid var(--border);
-    display:flex;align-items:center;justify-content:center;text-align:center;padding:16px 20px;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 16px;
   }
   .node.decision .diamond-bg{
-    position:absolute;inset:8px;background:var(--surface-2);border:1px solid rgba(217,169,79,.35);
+    position:absolute;inset:6px;background:var(--surface-2);border:1px solid rgba(217,169,79,.35);
     transform:rotate(45deg);border-radius:6px;z-index:0;
   }
   .node.decision .d-content{position:relative;z-index:1;}
-  .node.decision .c-icon{margin:0 auto 8px;color:var(--amber);background:var(--amber-soft);}
-  .node.decision .c-title{font-size:12.5px;font-weight:700;line-height:1.35;}
+  .node.decision .c-icon{margin:0 auto 6px;color:var(--amber);background:var(--amber-soft);}
+  .node.decision .c-title{
+    font-size:11.5px;font-weight:700;line-height:1.32;-webkit-line-clamp:4;margin:0;
+  }
   .node.decision:hover .card{border-color:rgba(217,169,79,.4);}
   .node.decision.selected .card{box-shadow:0 0 0 3px var(--amber-soft);}
 
   .node.start .card, .node.end .card{
-    display:flex;align-items:center;gap:10px;border-radius:100px;padding:10px 18px;
+    display:flex;align-items:center;gap:9px;border-radius:100px;padding:9px 16px;
   }
-  .node.start .c-title, .node.end .c-title{font-size:12.5px;margin:0;}
+  .node.start .c-title, .node.end .c-title{font-size:11.5px;margin:0;-webkit-line-clamp:1;}
   .node.start .c-desc, .node.end .c-desc{display:none;}
   .node.start .c-top, .node.end .c-top{margin:0;}
 
@@ -251,16 +244,6 @@
   .catalog-detail h4{font-size:14.5px;font-weight:700;margin-bottom:8px;}
   .catalog-detail p{font-size:13px;color:var(--text-dim);line-height:1.6;max-width:70ch;}
 
-  /* ============ EMPTY STATE ============ */
-  .empty-state{
-    position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
-    gap:10px;color:var(--text-faint);
-  }
-  .empty-state.show{display:flex;}
-  .empty-state .es-icon{color:var(--text-faint);opacity:.6;}
-  .empty-state .es-title{font-size:13px;font-weight:600;color:var(--text-dim);}
-  .empty-state .es-sub{font-size:12px;}
-
   /* ============ SIDE PANEL ============ */
   .panel-overlay{
     position:absolute;inset:0;background:rgba(4,5,8,.35);opacity:0;pointer-events:none;
@@ -276,8 +259,14 @@
   .side-panel.open{transform:translateX(0);}
   .panel-head{
     flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
-    padding:22px 22px 16px;border-bottom:1px solid var(--border);
+    padding:20px 22px 16px;border-bottom:1px solid var(--border);
   }
+  .panel-head-main{flex:1;min-width:0;}
+  .back-btn{
+    all:unset;display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:11.5px;font-weight:600;
+    color:var(--text-faint);margin-bottom:10px;transition:color .15s;
+  }
+  .back-btn:hover{color:var(--text);}
   .panel-head .ph-tag{
     display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;
     letter-spacing:.06em;color:var(--text-faint);margin-bottom:8px;
@@ -299,17 +288,20 @@
     display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text);
     background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-s);padding:7px 12px;
   }
-  .p-doclist{display:flex;flex-direction:column;gap:6px;}
+  .p-doclist{display:flex;flex-direction:column;gap:6px;padding:0;margin:0;}
   .p-doclist li{list-style:none;font-size:12.5px;color:var(--text-dim);display:flex;gap:8px;align-items:flex-start;}
   .p-doclist li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--text-faint);margin-top:6px;flex:none;}
+  .p-paths{display:flex;flex-direction:column;gap:8px;}
   .p-next{
-    all:unset;display:flex;align-items:center;justify-content:space-between;width:100%;cursor:pointer;
+    all:unset;display:flex;align-items:center;justify-content:space-between;width:100%;cursor:pointer;gap:10px;
     background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);padding:12px 14px;
     transition:border-color .15s, background .15s;
   }
   .p-next:hover{border-color:var(--accent-line); background:var(--surface-2);}
+  .p-next .pn-left{min-width:0;}
   .p-next .pn-title{font-size:12.5px;font-weight:600;color:var(--text);}
   .p-next .pn-sub{font-size:10.5px;color:var(--text-faint);margin-top:2px;}
+  .p-next svg{flex:none;color:var(--text-faint);}
 
   ::-webkit-scrollbar{width:8px;height:8px;}
   ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;}
@@ -336,9 +328,7 @@
         <div class="sub">Central de consulta e direcionamento dos fluxos de atendimento</div>
       </div>
     </div>
-    <div class="topbar-right">
-      <span class="env-tag">Uso interno · Medicamental</span>
-    </div>
+    <span class="env-tag">Uso interno · Medicamental</span>
   </header>
 
   <div class="body-row">
@@ -353,6 +343,7 @@
 
       <div class="nav-label">Fluxos de atendimento</div>
       <nav class="nav-list" id="navList"></nav>
+      <div class="sidebar-gap"></div>
 
       <div class="sidebar-foot">
         <div class="legend">
@@ -370,24 +361,13 @@
     <main class="main">
       <div class="crumbbar">
         <div class="breadcrumb" id="breadcrumb"></div>
-        <div class="toolbar" id="toolbar">
-          <button class="tbtn" id="zoomOut" title="Reduzir zoom">−</button>
-          <span class="zoom-pct" id="zoomPct">100%</span>
-          <button class="tbtn" id="zoomIn" title="Aumentar zoom">+</button>
-          <button class="tbtn wide" id="fitScreen" title="Ajustar à tela">Ajustar à tela</button>
-          <button class="tbtn wide" id="centerFlow" title="Centralizar">Centralizar</button>
-        </div>
+        <span class="scale-tag" id="scaleTag"></span>
       </div>
 
       <div class="canvas-viewport" id="viewport">
         <div class="canvas-surface" id="surface">
           <svg class="connectors" id="connectors"></svg>
           <div id="nodesLayer"></div>
-        </div>
-        <div class="empty-state" id="emptyState">
-          <svg class="es-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg>
-          <div class="es-title">Nenhuma etapa encontrada</div>
-          <div class="es-sub">Ajuste os termos da busca ou selecione outro processo.</div>
         </div>
       </div>
 
@@ -399,7 +379,11 @@
       <div class="panel-overlay" id="panelOverlay"></div>
       <aside class="side-panel" id="sidePanel">
         <div class="panel-head">
-          <div>
+          <div class="panel-head-main">
+            <button class="back-btn" id="backBtn" style="display:none;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="11,6 5,12 11,18"/></svg>
+              Voltar
+            </button>
             <div class="ph-tag" id="panelTag">Etapa</div>
             <h2 id="panelTitle">—</h2>
           </div>
@@ -419,14 +403,16 @@
   /* =====================================================================
      CAMADA DE DADOS
      ---------------------------------------------------------------------
-     Cada processo é um objeto independente da camada visual, no formato:
+     Cada processo é independente da camada visual, no formato:
        { id, title, entry, nodes:[{id,type,title,desc,tag,owner,
-         guidance,docs,prazo,col,row,next}], edges:[{from,to,side,label}] }
+         guidance,docs,prazo,col,row}], edges:[{from,to,dir,label}] }
      tipos de nó: start | step | decision | redirect | end
+     dir da conexão: "right" (padrão, fluxo principal) | "down" (ramificação
+     de uma decisão, cai para a linha abaixo).
      Os dados abaixo refletem os fluxos reais do Sac Medicamental
-     ("Fluxo atual — Devolução e Portal do Cliente"). Para adicionar um
-     novo processo, basta incluir um novo objeto neste array seguindo a
-     mesma estrutura — nenhuma alteração de interface é necessária.
+     ("Fluxo atual — Devolução e Portal do Cliente"). Para adicionar um novo
+     processo, inclua um novo objeto neste array — a interface se adapta
+     automaticamente, sem alterações de código.
      ===================================================================== */
 
   const PROCESSES = [
@@ -440,43 +426,43 @@
         {id:"t2", type:"step", title:"Emissão do espelho", tag:"Documentação", owner:"Sac / Portal do Cliente",
          desc:"É gerado o espelho da devolução, documento-base para a nota fiscal de devolução (NFD).",
          guidance:"Verifique se todos os itens do pedido original constam no espelho gerado.",
-         prazo:"5 dias", col:0, row:1},
+         prazo:"5 dias", col:1, row:0},
         {id:"t3", type:"step", title:"Anexar a NFD", tag:"Documentação", owner:"Sac / Portal do Cliente",
          desc:"A nota fiscal de devolução é anexada ao protocolo.",
          guidance:"Pelo Sac, o atendente anexa a NFD e dá andamento manualmente. Pelo Portal do Cliente, o cliente anexa a NFD e o andamento é automático.",
-         docs:["Nota Fiscal de Devolução (NFD)"], prazo:"5 dias", col:0, row:2},
+         docs:["Nota Fiscal de Devolução (NFD)"], prazo:"5 dias", col:2, row:0},
         {id:"t4", type:"step", title:"Análise da NFD e coleta", tag:"Devolução", owner:"Setor de Devolução",
          desc:"O setor de devolução confere a NFD e agenda a coleta da mercadoria.",
          guidance:"Confirme divergências entre a NFD e o pedido original antes de solicitar a coleta.",
-         prazo:"5 dias", col:0, row:3},
+         prazo:"5 dias", col:3, row:0},
         {id:"t5", type:"step", title:"Sustação de título", tag:"Financeiro", owner:"Financeiro",
          desc:"O financeiro sustém a cobrança do título vinculado ao pedido em devolução.",
          guidance:"A sustação deve ocorrer antes do vencimento do título para evitar cobrança indevida.",
-         prazo:"5 dias", col:0, row:4},
+         prazo:"5 dias", col:4, row:0},
         {id:"t6", type:"step", title:"Coleta", tag:"Logística", owner:"Transportadora",
          desc:"A transportadora realiza a coleta da mercadoria devolvida no endereço do cliente.",
          guidance:"Acompanhe o prazo de coleta junto à transportadora; atrasos devem ser registrados.",
-         prazo:"15 dias", col:0, row:5},
+         prazo:"15 dias", col:5, row:0},
         {id:"t7", type:"decision", title:"Canhoto foi localizado durante o processo?", tag:"Decisão", owner:"Sac / Financeiro",
          desc:"Em qualquer etapa anterior, verifica-se se o canhoto assinado da entrega foi localizado.",
          guidance:"Sempre que o canhoto for localizado, priorize o encerramento do protocolo e a reativação do título.",
-         col:0, row:6},
+         col:6, row:0},
         {id:"t8", type:"redirect", title:"Financeiro reativa o título", tag:"Direcionamento", owner:"Financeiro",
          desc:"O canhoto localizado é anexado ao protocolo e o financeiro reativa a cobrança do título.",
-         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:1, row:6},
+         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:6, row:1},
         {id:"t9", type:"end", title:"Protocolo reativado e finalizado", tag:"Encerramento", owner:"Financeiro",
-         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:1, row:7},
+         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:7, row:1},
         {id:"t10", type:"step", title:"Recebimento no CD", tag:"Logística", owner:"CD Medicamental",
          desc:"A devolução retorna ao CD e passa por conferência da nota fiscal.",
          guidance:"Confira quantidade e integridade dos itens recebidos antes de liberar a efetivação.",
-         prazo:"5 dias", col:0, row:7},
+         prazo:"5 dias", col:7, row:0},
         {id:"t11", type:"end", title:"Efetivação da devolução", tag:"Encerramento", owner:"Setor de Devolução",
-         desc:"Após a conferência, a devolução total é efetivada no sistema.", col:0, row:8}
+         desc:"Após a conferência, a devolução total é efetivada no sistema.", col:8, row:0}
       ],
       edges:[
         {from:"t1",to:"t2"},{from:"t2",to:"t3"},{from:"t3",to:"t4"},{from:"t4",to:"t5"},
         {from:"t5",to:"t6"},{from:"t6",to:"t7"},
-        {from:"t7",to:"t8",side:"right",label:"SIM"},{from:"t8",to:"t9"},
+        {from:"t7",to:"t8",dir:"down",label:"SIM"},{from:"t8",to:"t9"},
         {from:"t7",to:"t10",label:"NÃO"},{from:"t10",to:"t11"}
       ]
     },
@@ -490,38 +476,38 @@
         {id:"p2", type:"step", title:"Emissão do espelho", tag:"Documentação", owner:"Sac / Portal do Cliente",
          desc:"É gerado o espelho da devolução, documento-base para a nota fiscal de devolução (NFD).",
          guidance:"Verifique se apenas os itens da devolução parcial constam no espelho.",
-         prazo:"5 dias", col:0, row:1},
+         prazo:"5 dias", col:1, row:0},
         {id:"p3", type:"step", title:"Anexar a NFD", tag:"Documentação", owner:"Sac / Portal do Cliente",
          desc:"A nota fiscal de devolução é anexada ao protocolo.",
          guidance:"Pelo Sac, o atendente anexa a NFD e dá andamento manualmente. Pelo Portal do Cliente, o cliente anexa a NFD e o andamento é automático.",
-         docs:["Nota Fiscal de Devolução (NFD)"], prazo:"5 dias", col:0, row:2},
+         docs:["Nota Fiscal de Devolução (NFD)"], prazo:"5 dias", col:2, row:0},
         {id:"p4", type:"step", title:"Análise da NFD e coleta", tag:"Devolução", owner:"Setor de Devolução",
          desc:"O setor de devolução confere a NFD e agenda a coleta da parte devolvida.",
          guidance:"Confirme que o volume a coletar corresponde apenas aos itens da devolução parcial.",
-         prazo:"5 dias", col:0, row:3},
+         prazo:"5 dias", col:3, row:0},
         {id:"p5", type:"step", title:"Coleta", tag:"Logística", owner:"Transportadora",
          desc:"A transportadora realiza a coleta da mercadoria devolvida no endereço do cliente.",
          guidance:"Acompanhe o prazo de coleta junto à transportadora; atrasos devem ser registrados.",
-         prazo:"15 dias", col:0, row:4},
+         prazo:"15 dias", col:4, row:0},
         {id:"p6", type:"decision", title:"Canhoto foi localizado durante o processo?", tag:"Decisão", owner:"Sac / Financeiro",
          desc:"Em qualquer etapa anterior, verifica-se se o canhoto assinado da entrega foi localizado.",
          guidance:"Sempre que o canhoto for localizado, priorize o encerramento do protocolo e a reativação do título.",
-         col:0, row:5},
+         col:5, row:0},
         {id:"p7", type:"redirect", title:"Financeiro reativa o título", tag:"Direcionamento", owner:"Financeiro",
          desc:"O canhoto localizado é anexado ao protocolo e o financeiro reativa a cobrança do título.",
-         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:1, row:5},
+         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:5, row:1},
         {id:"p8", type:"end", title:"Protocolo reativado e finalizado", tag:"Encerramento", owner:"Financeiro",
-         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:1, row:6},
+         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:6, row:1},
         {id:"p9", type:"step", title:"Recebimento no CD", tag:"Logística", owner:"CD Medicamental",
          desc:"A devolução retorna ao CD e passa por conferência da nota fiscal.",
          guidance:"Confira quantidade e integridade dos itens recebidos antes de liberar a efetivação.",
-         prazo:"5 dias", col:0, row:6},
+         prazo:"5 dias", col:6, row:0},
         {id:"p10", type:"end", title:"Efetivação da devolução", tag:"Encerramento", owner:"Setor de Devolução",
-         desc:"Após a conferência, a devolução parcial é efetivada no sistema.", col:0, row:7}
+         desc:"Após a conferência, a devolução parcial é efetivada no sistema.", col:7, row:0}
       ],
       edges:[
         {from:"p1",to:"p2"},{from:"p2",to:"p3"},{from:"p3",to:"p4"},{from:"p4",to:"p5"},{from:"p5",to:"p6"},
-        {from:"p6",to:"p7",side:"right",label:"SIM"},{from:"p7",to:"p8"},
+        {from:"p6",to:"p7",dir:"down",label:"SIM"},{from:"p7",to:"p8"},
         {from:"p6",to:"p9",label:"NÃO"},{from:"p9",to:"p10"}
       ]
     },
@@ -535,29 +521,29 @@
         {id:"r2", type:"step", title:"Análise de canhoto", tag:"Validação", owner:"Sac",
          desc:"O Sac verifica se consta canhoto assinado da entrega e segue com o andamento.",
          guidance:"Consulte o histórico de entrega antes de confirmar a ausência de canhoto.",
-         prazo:"5 dias", col:0, row:1},
+         prazo:"5 dias", col:1, row:0},
         {id:"r3", type:"step", title:"Sustação de título", tag:"Financeiro", owner:"Financeiro",
          desc:"O financeiro sustém a cobrança do título vinculado ao pedido recusado.",
          guidance:"A sustação deve ocorrer antes do vencimento do título para evitar cobrança indevida.",
-         prazo:"5 dias", col:0, row:2},
+         prazo:"5 dias", col:2, row:0},
         {id:"r4", type:"decision", title:"Canhoto foi localizado pelo transporte?", tag:"Decisão", owner:"Transporte",
          desc:"O transporte verifica se o canhoto da entrega foi localizado.",
          guidance:"Caso localizado, anexe o canhoto ao protocolo antes de encaminhar ao financeiro.",
-         col:0, row:3},
+         col:3, row:0},
         {id:"r5", type:"redirect", title:"Financeiro reativa o título", tag:"Direcionamento", owner:"Financeiro",
          desc:"O canhoto localizado é anexado ao protocolo e o financeiro reativa a cobrança do título.",
-         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:1, row:3},
+         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:3, row:1},
         {id:"r6", type:"end", title:"Protocolo reativado e finalizado", tag:"Encerramento", owner:"Financeiro",
-         desc:"O protocolo é finalizado com o título reativado.", col:1, row:4},
+         desc:"O protocolo é finalizado com o título reativado.", col:4, row:1},
         {id:"r7", type:"step", title:"Transporte dá andamento", tag:"Logística", owner:"Transporte",
          desc:"Sem o canhoto localizado, o transporte dá andamento ao processo de recusa.",
-         guidance:"Registre a justificativa da ausência de canhoto antes de dar andamento.", col:0, row:4},
+         guidance:"Registre a justificativa da ausência de canhoto antes de dar andamento.", col:4, row:0},
         {id:"r8", type:"end", title:"Efetivação da recusa", tag:"Encerramento", owner:"Setor de Devolução",
-         desc:"O setor de devolução segue com a efetivação do processo de recusa.", col:0, row:5}
+         desc:"O setor de devolução segue com a efetivação do processo de recusa.", col:5, row:0}
       ],
       edges:[
         {from:"r1",to:"r2"},{from:"r2",to:"r3"},{from:"r3",to:"r4"},
-        {from:"r4",to:"r5",side:"right",label:"SIM"},{from:"r5",to:"r6"},
+        {from:"r4",to:"r5",dir:"down",label:"SIM"},{from:"r5",to:"r6"},
         {from:"r4",to:"r7",label:"NÃO"},{from:"r7",to:"r8"}
       ]
     },
@@ -570,26 +556,26 @@
         {id:"c2", type:"step", title:"Sustação de título", tag:"Financeiro", owner:"Financeiro",
          desc:"O financeiro sustém a cobrança do título enquanto o canhoto é localizado.",
          guidance:"A sustação deve ocorrer antes do vencimento do título para evitar cobrança indevida.",
-         prazo:"5 dias", col:0, row:1},
+         prazo:"5 dias", col:1, row:0},
         {id:"c3", type:"decision", title:"Consta canhoto da entrega?", tag:"Decisão", owner:"Transporte",
          desc:"O transporte analisa se consta canhoto assinado da entrega.",
          guidance:"Consulte o histórico de rastreio e o motorista responsável pela entrega.",
-         prazo:"5 dias", col:0, row:2},
+         prazo:"5 dias", col:2, row:0},
         {id:"c4", type:"redirect", title:"Anexa o canhoto", tag:"Direcionamento", owner:"Transporte",
          desc:"O canhoto localizado é anexado ao protocolo.",
-         guidance:"Envie o canhoto digitalizado com boa legibilidade da assinatura.", col:1, row:2},
+         guidance:"Envie o canhoto digitalizado com boa legibilidade da assinatura.", col:2, row:1},
         {id:"c5", type:"end", title:"Financeiro reativa e finaliza", tag:"Encerramento", owner:"Financeiro",
-         desc:"O financeiro reativa o título e finaliza o protocolo.", prazo:"5 dias", col:1, row:3},
+         desc:"O financeiro reativa o título e finaliza o protocolo.", prazo:"5 dias", col:3, row:1},
         {id:"c6", type:"step", title:"Sac gera ordem", tag:"Abertura", owner:"Sac",
          desc:"Sem o canhoto localizado, o Sac dá andamento gerando uma ordem de serviço.",
          guidance:"Informe o cliente sobre o andamento e o novo prazo estimado.",
-         prazo:"5 dias", col:0, row:3},
+         prazo:"5 dias", col:3, row:0},
         {id:"c7", type:"end", title:"Efetivação", tag:"Encerramento", owner:"Setor de Devolução",
-         desc:"O setor de devolução segue com a efetivação do processo.", col:0, row:4}
+         desc:"O setor de devolução segue com a efetivação do processo.", col:4, row:0}
       ],
       edges:[
         {from:"c1",to:"c2"},{from:"c2",to:"c3"},
-        {from:"c3",to:"c4",side:"right",label:"SIM"},{from:"c4",to:"c5"},
+        {from:"c3",to:"c4",dir:"down",label:"SIM"},{from:"c4",to:"c5"},
         {from:"c3",to:"c6",label:"NÃO"},{from:"c6",to:"c7"}
       ]
     }
@@ -633,38 +619,44 @@
      ÍCONES
      ===================================================================== */
   const ICONS = {
-    start:`<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>`,
-    step:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>`,
-    decision:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2" transform="rotate(45 12 12)"/></svg>`,
-    redirect:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="4" y1="12" x2="17" y2="12"/><polyline points="12,7 17,12 12,17"/></svg>`,
-    end:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="5,13 10,18 19,6"/></svg>`
+    start:`<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>`,
+    step:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>`,
+    decision:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2" transform="rotate(45 12 12)"/></svg>`,
+    redirect:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="4" y1="12" x2="17" y2="12"/><polyline points="12,7 17,12 12,17"/></svg>`,
+    end:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="5,13 10,18 19,6"/></svg>`
   };
 
   /* =====================================================================
-     LAYOUT — conversão de grid (col,row) em pixels
+     LAYOUT — grid (col,row) → pixels, largura/altura calculadas por
+     coluna/linha (evita qualquer sobreposição entre tipos de nó distintos)
      ===================================================================== */
-  const COL_W = 268, ROW_GAP = 64, PAD = 56;
+  const COL_GAP = 46, ROW_GAP = 40, PAD = 40;
   const SIZE = {
-    start:{w:200,h:52}, end:{w:200,h:52}, step:{w:216,h:118}, redirect:{w:216,h:110}, decision:{w:184,h:184}
+    start:{w:152,h:44}, end:{w:152,h:44}, step:{w:172,h:98}, redirect:{w:172,h:92}, decision:{w:150,h:150}
   };
 
-  // Layout em duas passadas: a altura de cada linha é a do maior nó daquela
-  // linha (o nó de decisão é mais alto que os demais), e as linhas seguintes
-  // só começam depois dessa altura — isso evita sobreposição entre etapas.
   function layoutNodes(proc){
-    const rowsUsed = {};
-    proc.nodes.forEach(n=>{ rowsUsed[n.row] = Math.max(rowsUsed[n.row]||0, SIZE[n.type].h); });
+    const colsUsed={}, rowsUsed={};
+    proc.nodes.forEach(n=>{
+      const s = SIZE[n.type];
+      colsUsed[n.col] = Math.max(colsUsed[n.col]||0, s.w);
+      rowsUsed[n.row] = Math.max(rowsUsed[n.row]||0, s.h);
+    });
+    const colKeys = Object.keys(colsUsed).map(Number).sort((a,b)=>a-b);
     const rowKeys = Object.keys(rowsUsed).map(Number).sort((a,b)=>a-b);
-    const rowY = {};
-    let acc = PAD;
-    rowKeys.forEach(r=>{ rowY[r] = acc; acc += rowsUsed[r] + ROW_GAP; });
+    const colX = {}; let accX = PAD;
+    colKeys.forEach(c=>{ colX[c]=accX; accX += colsUsed[c]+COL_GAP; });
+    const rowY = {}; let accY = PAD;
+    rowKeys.forEach(r=>{ rowY[r]=accY; accY += rowsUsed[r]+ROW_GAP; });
 
     proc.nodes.forEach(n=>{
       const s = SIZE[n.type];
       n.w = s.w; n.h = s.h;
-      n.x = PAD + n.col*COL_W + (216-s.w)/2;
+      n.x = colX[n.col] + (colsUsed[n.col]-s.w)/2;
       n.y = rowY[n.row] + (rowsUsed[n.row]-s.h)/2;
     });
+    proc._contentW = accX - COL_GAP + PAD;
+    proc._contentH = accY - ROW_GAP + PAD;
   }
   PROCESSES.forEach(layoutNodes);
 
@@ -680,7 +672,8 @@
   /* =====================================================================
      ESTADO
      ===================================================================== */
-  const state = { view:"flow", processId:PROCESSES[0].id, scale:1, tx:0, ty:0, selectedNode:null, selectedReasonIdx:0 };
+  const state = { view:"flow", processId:PROCESSES[0].id, selectedNode:null, selectedReasonIdx:0 };
+  let panelHistory = [];
 
   const els = {
     navList: document.getElementById("navList"),
@@ -689,17 +682,16 @@
     connectors: document.getElementById("connectors"),
     viewport: document.getElementById("viewport"),
     breadcrumb: document.getElementById("breadcrumb"),
-    emptyState: document.getElementById("emptyState"),
+    scaleTag: document.getElementById("scaleTag"),
     catalogView: document.getElementById("catalogView"),
     catalogGrid: document.getElementById("catalogGrid"),
     catalogDetail: document.getElementById("catalogDetail"),
-    toolbar: document.getElementById("toolbar"),
-    zoomPct: document.getElementById("zoomPct"),
     sidePanel: document.getElementById("sidePanel"),
     panelOverlay: document.getElementById("panelOverlay"),
     panelTitle: document.getElementById("panelTitle"),
     panelTag: document.getElementById("panelTag"),
     panelBody: document.getElementById("panelBody"),
+    backBtn: document.getElementById("backBtn"),
     searchInput: document.getElementById("searchInput"),
     searchResults: document.getElementById("searchResults")
   };
@@ -736,36 +728,33 @@
   }
 
   /* =====================================================================
-     RENDER DO FLUXO
+     RENDER DO FLUXO — escala automática, sem arrastar/rolar
      ===================================================================== */
   function renderFlow(){
     const proc = currentProcess();
     els.nodesLayer.innerHTML = "";
     els.connectors.innerHTML = "";
 
-    let maxX=0, maxY=0;
-    proc.nodes.forEach(n=>{ maxX=Math.max(maxX,n.x+n.w); maxY=Math.max(maxY,n.y+n.h); });
-    const surfW = maxX+PAD, surfH = maxY+PAD;
+    const surfW = proc._contentW, surfH = proc._contentH;
     els.surface.style.width = surfW+"px";
     els.surface.style.height = surfH+"px";
     els.connectors.setAttribute("width", surfW);
     els.connectors.setAttribute("height", surfH);
     els.connectors.setAttribute("viewBox", `0 0 ${surfW} ${surfH}`);
 
-    // conectores
     proc.edges.forEach(e=>{
       const from = proc.nodes.find(n=>n.id===e.from);
       const to = proc.nodes.find(n=>n.id===e.to);
-      const fromSide = e.side || "bottom";
-      const toSide = fromSide==="right" ? "left" : "top";
-      const a = anchor(from, fromSide), b = anchor(to, toSide);
+      const isDown = e.dir === "down";
+      const a = anchor(from, isDown ? "bottom" : "right");
+      const b = anchor(to, isDown ? "top" : "left");
       let d;
-      if(fromSide==="right"){
-        const dx = Math.max(40, (b.x-a.x)/2);
-        d = `M ${a.x} ${a.y} C ${a.x+dx} ${a.y}, ${b.x-dx} ${b.y}, ${b.x} ${b.y}`;
-      } else {
-        const dy = Math.max(40, (b.y-a.y)/2);
+      if(isDown){
+        const dy = Math.max(28, (b.y-a.y)/2);
         d = `M ${a.x} ${a.y} C ${a.x} ${a.y+dy}, ${b.x} ${b.y-dy}, ${b.x} ${b.y}`;
+      } else {
+        const dx = Math.max(28, (b.x-a.x)/2);
+        d = `M ${a.x} ${a.y} C ${a.x+dx} ${a.y}, ${b.x-dx} ${b.y}, ${b.x} ${b.y}`;
       }
       const path = document.createElementNS("http://www.w3.org/2000/svg","path");
       path.setAttribute("d", d);
@@ -773,7 +762,7 @@
       els.connectors.appendChild(path);
 
       if(e.label){
-        const mid = {x:(a.x+b.x)/2, y:(a.y+b.y)/2};
+        const mid = isDown ? {x:a.x, y:(a.y+b.y)/2} : {x:(a.x+b.x)/2, y:a.y};
         const lbl = document.createElement("div");
         lbl.className = "edge-label " + (e.label==="SIM" ? "yes" : "no");
         lbl.textContent = e.label;
@@ -784,7 +773,6 @@
       }
     });
 
-    // nós
     proc.nodes.forEach((n, idx)=>{
       const wrap = document.createElement("div");
       wrap.className = "node " + n.type;
@@ -792,7 +780,7 @@
       wrap.style.width = n.w+"px"; wrap.style.height = n.h+"px";
       wrap.dataset.id = n.id;
 
-      const idxLabel = n.type==="step" || n.type==="redirect" ? `<span class="c-idx">${String(idx+1).padStart(2,"0")}</span>` : "";
+      const idxLabel = (n.type==="step" || n.type==="redirect") ? `<span class="c-idx">${String(idx+1).padStart(2,"0")}</span>` : "";
 
       if(n.type==="decision"){
         wrap.innerHTML = `
@@ -829,6 +817,8 @@
       const el = els.nodesLayer.querySelector(`.node[data-id="${state.selectedNode}"]`);
       if(el) el.classList.add("selected");
     }
+
+    autoFit();
   }
 
   function highlight(id){
@@ -847,73 +837,36 @@
   }
 
   /* =====================================================================
-     PAN & ZOOM
+     ESCALA AUTOMÁTICA — o fluxo sempre cabe por completo na tela,
+     sem necessidade de zoom, arraste ou rolagem.
      ===================================================================== */
-  function applyTransform(){
-    els.surface.style.transform = `translate(${state.tx}px,${state.ty}px) scale(${state.scale})`;
-    els.zoomPct.textContent = Math.round(state.scale*100)+"%";
-  }
-
-  function fitToScreen(animateFrom){
+  function autoFit(){
     const proc = currentProcess();
-    if(!proc.nodes.length) return;
-    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
-    proc.nodes.forEach(n=>{ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+n.w); maxY=Math.max(maxY,n.y+n.h); });
     const vp = els.viewport.getBoundingClientRect();
-    const contentW = (maxX-minX)+PAD*2, contentH = (maxY-minY)+PAD*2;
-    let scale = Math.min(vp.width/contentW, vp.height/contentH, 1.05);
-    scale = Math.max(0.35, scale);
-    state.scale = scale;
-    state.tx = (vp.width - (maxX-minX)*scale)/2 - minX*scale;
-    state.ty = (vp.height - (maxY-minY)*scale)/2 - minY*scale;
-    applyTransform();
+    if(vp.width<=0 || vp.height<=0) return;
+    const scale = Math.min(vp.width/proc._contentW, vp.height/proc._contentH, 1);
+    const tx = (vp.width - proc._contentW*scale)/2;
+    const ty = (vp.height - proc._contentH*scale)/2;
+    els.surface.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+    els.scaleTag.textContent = Math.round(scale*100)+"% de escala";
   }
-
-  let dragging=false, dragStart={x:0,y:0}, startTxTy={x:0,y:0};
-  els.viewport.addEventListener("pointerdown", (e)=>{
-    if(e.target.closest(".node")) return;
-    e.preventDefault();
-    dragging = true;
-    els.viewport.classList.add("grabbing");
-    dragStart = {x:e.clientX, y:e.clientY};
-    startTxTy = {x:state.tx, y:state.ty};
-    els.viewport.setPointerCapture(e.pointerId);
-  });
-  els.viewport.addEventListener("pointermove", (e)=>{
-    if(!dragging) return;
-    state.tx = startTxTy.x + (e.clientX-dragStart.x);
-    state.ty = startTxTy.y + (e.clientY-dragStart.y);
-    applyTransform();
-  });
-  els.viewport.addEventListener("pointerup", (e)=>{
-    dragging=false; els.viewport.classList.remove("grabbing");
-    try{ els.viewport.releasePointerCapture(e.pointerId); }catch(err){}
-  });
-
-  function zoomBy(factor){
-    const vp = els.viewport.getBoundingClientRect();
-    const cx = vp.width/2, cy = vp.height/2;
-    const contentX = (cx-state.tx)/state.scale, contentY = (cy-state.ty)/state.scale;
-    state.scale = Math.max(0.35, Math.min(1.8, state.scale*factor));
-    state.tx = cx - contentX*state.scale;
-    state.ty = cy - contentY*state.scale;
-    applyTransform();
-  }
-  document.getElementById("zoomIn").addEventListener("click", ()=> zoomBy(1.18));
-  document.getElementById("zoomOut").addEventListener("click", ()=> zoomBy(1/1.18));
-  document.getElementById("fitScreen").addEventListener("click", ()=> fitToScreen());
-  document.getElementById("centerFlow").addEventListener("click", ()=> fitToScreen());
+  window.addEventListener("resize", ()=>{ if(state.view==="flow") autoFit(); });
 
   /* =====================================================================
-     PAINEL LATERAL
+     PAINEL LATERAL (com histórico para revisitar ramos de decisão)
      ===================================================================== */
-  function openPanel(n){
+  function openPanel(n, opts){
+    opts = opts || {};
+    if(!opts.isBack && state.selectedNode && state.selectedNode!==n.id){
+      panelHistory.push(state.selectedNode);
+    }
     state.selectedNode = n.id;
     renderFlow();
 
     const TAG_LABEL = {start:"Início", step:"Etapa", decision:"Decisão", redirect:"Direcionamento", end:"Finalização"};
     els.panelTag.textContent = TAG_LABEL[n.type];
     els.panelTitle.textContent = n.title;
+    els.backBtn.style.display = panelHistory.length ? "inline-flex" : "none";
 
     const proc = currentProcess();
     const outgoing = proc.edges.filter(e=>e.from===n.id);
@@ -924,10 +877,14 @@
     if(n.docs && n.docs.length) html += `<div class="p-block"><div class="pb-label">Documentos necessários</div><ul class="p-doclist">${n.docs.map(d=>`<li>${d}</li>`).join("")}</ul></div>`;
     if(n.prazo) html += `<div class="p-block"><div class="pb-label">Prazo</div><span class="p-badge">${n.prazo}</span></div>`;
     if(outgoing.length){
-      html += `<div class="p-block"><div class="pb-label">Próxima etapa</div><div style="display:flex;flex-direction:column;gap:8px;">`;
+      const label = outgoing.length>1 ? "Próximas etapas possíveis" : "Próxima etapa";
+      html += `<div class="p-block"><div class="pb-label">${label}</div><div class="p-paths">`;
       outgoing.forEach(e=>{
         const target = proc.nodes.find(x=>x.id===e.to);
-        html += `<button class="p-next" data-next="${target.id}"><span><span class="pn-title">${target.title}</span><span class="pn-sub">${e.label ? e.label+" · " : ""}${TAG_LABEL[target.type]}</span></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg></button>`;
+        html += `<button class="p-next" data-next="${target.id}">
+          <span class="pn-left"><span class="pn-title">${target.title}</span><span class="pn-sub">${e.label ? e.label+" · " : ""}${TAG_LABEL[target.type]}</span></span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+        </button>`;
       });
       html += `</div></div>`;
     }
@@ -942,10 +899,18 @@
     els.sidePanel.classList.add("open");
     els.panelOverlay.classList.add("show");
   }
+  els.backBtn.addEventListener("click", ()=>{
+    if(!panelHistory.length) return;
+    const prevId = panelHistory.pop();
+    const proc = currentProcess();
+    const prevNode = proc.nodes.find(n=>n.id===prevId);
+    if(prevNode) openPanel(prevNode, {isBack:true});
+  });
   function closePanel(){
     els.sidePanel.classList.remove("open");
     els.panelOverlay.classList.remove("show");
     state.selectedNode = null;
+    panelHistory = [];
     renderFlow();
   }
   document.getElementById("panelClose").addEventListener("click", closePanel);
@@ -989,14 +954,13 @@
     closePanel();
     els.catalogView.classList.add("show");
     els.viewport.style.display = "none";
-    els.toolbar.style.display = "none";
+    els.scaleTag.textContent = "";
     renderNav(); updateBreadcrumb(); renderCatalog();
   }
   function showFlow(){
     state.view = "flow";
     els.catalogView.classList.remove("show");
     els.viewport.style.display = "";
-    els.toolbar.style.display = "";
   }
 
   function selectProcess(id, opts){
@@ -1005,7 +969,6 @@
     if(state.view!=="flow") showFlow();
     closePanel();
     renderNav(); updateBreadcrumb(); renderFlow();
-    requestAnimationFrame(()=> fitToScreen());
     if(opts.openNode){
       const proc = currentProcess();
       const n = proc.nodes.find(x=>x.id===opts.openNode);
@@ -1051,10 +1014,8 @@
   /* =====================================================================
      INIT
      ===================================================================== */
-  window.addEventListener("resize", ()=>{ if(state.view==="flow") fitToScreen(); });
   renderNav();
   updateBreadcrumb();
   renderFlow();
-  requestAnimationFrame(()=> fitToScreen());
 })();
 </script>
