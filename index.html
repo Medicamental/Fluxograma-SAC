@@ -1,0 +1,517 @@
+<title>Fluxo SAC — Devoluções &amp; Portal do Cliente</title>
+<style>
+  :root{
+    --bg:#f4f8fd;
+    --surface:#ffffff;
+    --surface2:#eaf1fa;
+    --line:rgba(10,34,58,.12);
+    --text:#0c2136;
+    --muted:#5c7086;
+    --accent:#1f8fce;
+    --accent-soft:rgba(31,143,206,.12);
+    --good:#159a6d;
+    --good-soft:rgba(21,154,109,.12);
+    --warn:#c97a1c;
+    --warn-soft:rgba(201,122,28,.12);
+    --danger:#c0433f;
+    --danger-soft:rgba(192,67,63,.12);
+    --radius:18px;
+    --shadow:0 12px 32px -12px rgba(12,33,54,.18);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --bg:#070f1c;
+      --surface:#0e1c30;
+      --surface2:#12233b;
+      --line:rgba(255,255,255,.09);
+      --text:#eaf2fb;
+      --muted:#8ea3bf;
+      --accent:#3db4f2;
+      --accent-soft:rgba(61,180,242,.16);
+      --good:#3ddb9d;
+      --good-soft:rgba(61,219,157,.14);
+      --warn:#f0a94e;
+      --warn-soft:rgba(240,169,78,.14);
+      --danger:#f0736f;
+      --danger-soft:rgba(240,115,111,.14);
+      --shadow:0 20px 44px -16px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#070f1c;
+    --surface:#0e1c30;
+    --surface2:#12233b;
+    --line:rgba(255,255,255,.09);
+    --text:#eaf2fb;
+    --muted:#8ea3bf;
+    --accent:#3db4f2;
+    --accent-soft:rgba(61,180,242,.16);
+    --good:#3ddb9d;
+    --good-soft:rgba(61,219,157,.14);
+    --warn:#f0a94e;
+    --warn-soft:rgba(240,169,78,.14);
+    --danger:#f0736f;
+    --danger-soft:rgba(240,115,111,.14);
+    --shadow:0 20px 44px -16px rgba(0,0,0,.55);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, var(--line) 100%, transparent),
+      radial-gradient(1px 1px at 68% 8%, var(--line) 100%, transparent),
+      radial-gradient(1px 1px at 82% 42%, var(--line) 100%, transparent),
+      radial-gradient(1px 1px at 30% 70%, var(--line) 100%, transparent),
+      radial-gradient(1px 1px at 92% 76%, var(--line) 100%, transparent);
+    background-attachment:fixed;
+  }
+  h1,h2,h3{font-family:ui-rounded,"SF Pro Rounded","Segoe UI",Nunito,sans-serif; text-wrap:balance; margin:0;}
+  .mono{font-family:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:56px 28px 120px;}
+
+  /* ---------- Header ---------- */
+  header{margin-bottom:52px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";width:7px;height:7px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);
+  }
+  h1{font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.08;letter-spacing:-.01em;}
+  header p{max-width:640px;color:var(--muted);font-size:16px;line-height:1.6;margin-top:14px;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .legend span{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:12.5px;color:var(--muted);background:var(--surface);
+    border:1px solid var(--line);border-radius:100px;padding:6px 12px 6px 8px;
+  }
+  .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+
+  /* ---------- Chain overview ---------- */
+  .chain-section{position:relative;margin-bottom:12px;}
+  .chain-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative;z-index:1;
+  }
+  .chain-svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+
+  .nucleus{
+    all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:14px;
+    width:100%;
+  }
+  .nucleus .bubble{
+    width:104px;height:104px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 32% 28%, var(--surface2), var(--surface));
+    border:2px solid var(--line);
+    box-shadow:var(--shadow);
+    transition:transform .28s cubic-bezier(.2,.8,.2,1), border-color .28s, box-shadow .28s;
+    position:relative;
+  }
+  .nucleus .bubble::after{
+    content:"";position:absolute;inset:-2px;border-radius:50%;
+    border:2px solid var(--accent);opacity:0;transition:opacity .28s, transform .28s;
+    transform:scale(.86);
+  }
+  .nucleus[aria-expanded="true"] .bubble{border-color:var(--accent); transform:translateY(-4px) scale(1.04); box-shadow:0 18px 34px -10px var(--accent-soft);}
+  .nucleus[aria-expanded="true"] .bubble::after{opacity:1;transform:scale(1);}
+  .nucleus:hover .bubble{transform:translateY(-3px);}
+  .nucleus .glyph{font-size:30px;line-height:1;}
+  .nucleus .label{font-size:14.5px;font-weight:700;text-align:center;letter-spacing:-.005em;}
+  .nucleus .sub{font-size:12px;color:var(--muted);text-align:center;max-width:150px;line-height:1.4;}
+  .nucleus .count{
+    font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--line);
+    border-radius:100px;padding:2px 9px;margin-top:2px;font-family:ui-monospace,monospace;
+  }
+
+  /* ---------- Zones (expanded flow) ---------- */
+  .zone{
+    grid-column:1 / -1;
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .45s cubic-bezier(.2,.8,.2,1), opacity .35s, margin .35s;
+    margin-top:0;
+  }
+  .zone.open{max-height:2200px;opacity:1;margin-top:34px;}
+  .zone-inner{
+    background:var(--surface);border:1px solid var(--line);border-radius:24px;
+    padding:32px clamp(16px,4vw,40px) 36px;box-shadow:var(--shadow);
+  }
+  .zone-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .zone-head h3{font-size:19px;font-weight:800;}
+  .zone-flag{font-size:12px;color:var(--muted);}
+
+  .flow{
+    display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:30px 4px 10px;
+    scrollbar-width:thin;
+  }
+  .flow::-webkit-scrollbar{height:6px;}
+  .flow::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+
+  .step{position:relative;display:flex;flex-direction:column;align-items:center;flex:none;width:172px;}
+  .bond{
+    flex:none;width:56px;height:2px;background:var(--line);position:relative;top:34px;
+  }
+  .bond::after{
+    content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;
+    border-left-color:var(--line);
+  }
+  .bond .tag{
+    position:absolute;left:50%;top:-22px;transform:translateX(-50%);
+    font-size:10.5px;color:var(--muted);white-space:nowrap;font-family:ui-monospace,monospace;
+  }
+
+  .atom{
+    all:unset;cursor:pointer;width:68px;height:68px;border-radius:50%;flex:none;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
+    background:var(--surface2);border:2px solid var(--line);color:var(--text);
+    transition:transform .2s, border-color .2s, box-shadow .2s;
+    z-index:1;
+  }
+  .atom:hover{transform:scale(1.07);}
+  .atom.active{border-color:var(--accent);box-shadow:0 0 0 5px var(--accent-soft);}
+  .atom.end{background:var(--good-soft);border-color:var(--good);color:var(--good);}
+  .atom.risk{background:var(--danger-soft);border-color:var(--danger);color:var(--danger);}
+
+  .step .name{font-size:12.5px;font-weight:700;text-align:center;margin-top:10px;line-height:1.3;max-width:160px;}
+  .step .who{font-size:11px;color:var(--muted);text-align:center;margin-top:2px;}
+  .step .prazo{
+    margin-top:6px;font-size:10.5px;font-family:ui-monospace,monospace;color:var(--accent);
+    background:var(--accent-soft);border-radius:100px;padding:2px 8px;
+  }
+
+  .detail{
+    grid-column:1/-1;margin-top:2px;max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .3s ease, opacity .25s, margin .3s;
+  }
+  .detail.open{max-height:400px;opacity:1;margin-top:14px;}
+  .detail-card{
+    background:var(--surface2);border:1px solid var(--line);border-radius:14px;
+    padding:16px 20px;font-size:13.5px;line-height:1.55;color:var(--text);
+  }
+  .detail-card b{color:var(--accent);}
+  .detail-card .branches{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+  .detail-card .branch{
+    display:flex;gap:8px;font-size:13px;padding:8px 10px;border-radius:10px;background:var(--surface);
+    border:1px solid var(--line);
+  }
+  .detail-card .branch b{flex:none;}
+
+  .note{
+    grid-column:1/-1;margin-top:22px;display:flex;gap:10px;align-items:flex-start;
+    background:var(--good-soft);border:1px solid var(--good);border-radius:14px;padding:14px 18px;
+    font-size:13px;color:var(--text);
+  }
+  .note b{color:var(--good);}
+
+  /* ---------- Reasons cluster ---------- */
+  .reasons-section{margin-top:88px;}
+  .reasons-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px;}
+  .reasons-head h2{font-size:26px;font-weight:800;}
+  .reasons-head p{color:var(--muted);font-size:14.5px;max-width:520px;margin-top:8px;line-height:1.55;}
+  .reasons-hint{font-size:12px;color:var(--muted);white-space:nowrap;}
+
+  .cluster-wrap{
+    display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:start;
+  }
+  .cluster{
+    background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);
+    padding:26px;display:flex;flex-wrap:wrap;gap:12px;align-content:flex-start;min-height:420px;
+    position:relative;
+  }
+  .molecule{
+    all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+    padding:10px 16px;border-radius:100px;background:var(--surface2);
+    border:1.5px solid var(--line);font-size:12.5px;font-weight:700;color:var(--text);
+    transition:transform .18s, border-color .18s, background .18s;
+  }
+  .molecule .bump{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;}
+  .molecule:hover{transform:translateY(-2px);border-color:var(--accent);}
+  .molecule.sel{background:var(--accent-soft);border-color:var(--accent);}
+
+  .reason-panel{
+    background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;
+    box-shadow:var(--shadow);position:sticky;top:24px;min-height:420px;
+  }
+  .reason-panel .rp-empty{color:var(--muted);font-size:13.5px;line-height:1.6;padding-top:100px;text-align:center;}
+  .reason-panel .rp-tag{
+    display:inline-block;font-size:11px;font-family:ui-monospace,monospace;color:var(--accent);
+    background:var(--accent-soft);border-radius:100px;padding:3px 10px;margin-bottom:12px;
+  }
+  .reason-panel h3{font-size:17px;font-weight:800;line-height:1.3;margin-bottom:12px;}
+  .reason-panel p{font-size:14px;line-height:1.6;color:var(--text);}
+
+  footer{margin-top:70px;color:var(--muted);font-size:12.5px;text-align:center;}
+
+  @media (max-width:900px){
+    .chain-row{grid-template-columns:repeat(2,1fr);}
+    .cluster-wrap{grid-template-columns:1fr;}
+    .reason-panel{position:static;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">SAC Medicamental · Mapa de processos</div>
+    <h1>Devoluções, Recusas e Canhotos</h1>
+    <p>Toque em um núcleo para abrir a cadeia de etapas do processo. Toque em uma etapa para ver responsável, prazo e detalhes. O fluxo segue o documento oficial "Fluxo atual — Devolução e Portal do Cliente".</p>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--accent)"></i> Etapa do processo</span>
+      <span><i class="dot" style="background:var(--good)"></i> Efetivação / reativação</span>
+      <span><i class="dot" style="background:var(--danger)"></i> Ponto de risco / rastreio</span>
+    </div>
+  </header>
+
+  <section class="chain-section">
+    <div class="chain-row" id="chainRow"><!-- filled by JS --></div>
+  </section>
+
+  <section class="reasons-section">
+    <div class="reasons-head">
+      <div>
+        <h2>Motivos de devolução</h2>
+        <p>Catálogo de referência do Sac — toque em um motivo para ver o critério completo de tratamento.</p>
+      </div>
+      <div class="reasons-hint">23 motivos cadastrados</div>
+    </div>
+    <div class="cluster-wrap">
+      <div class="cluster" id="cluster"><!-- filled by JS --></div>
+      <div class="reason-panel" id="reasonPanel">
+        <div class="rp-empty">Selecione um motivo à esquerda para ver a descrição completa.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Fonte: "Fluxo atual — Devolução e Portal do Cliente" &amp; "Motivos de Devolução — Sac Medicamental".</footer>
+</div>
+
+<script>
+(function(){
+  const PROCESSES = [
+    {
+      id:"total", glyph:"↺", label:"Devolução total", sub:"Sac ou Portal do Cliente",
+      note:"Se o canhoto for localizado em qualquer etapa, o protocolo é finalizado e segue automaticamente para o financeiro reativar o título.",
+      steps:[
+        {name:"Abertura da devolução", who:"Sac ou Portal do Cliente", prazo:"7 dias",
+         detail:"Cliente ou atendente Sac formaliza a solicitação de devolução total do pedido."},
+        {name:"Emissão do espelho", who:"Sac ou Portal do Cliente", prazo:"5 dias",
+         detail:"É gerado o espelho da devolução, documento-base para a nota fiscal de devolução (NFD)."},
+        {name:"Anexar a NFD", who:"Sac ou Portal do Cliente", prazo:"5 dias",
+         detail:"A nota fiscal de devolução é anexada ao protocolo.",
+         branches:[
+           {tag:"Registro pelo Sac", text:"o atendente anexa a NFD e dá andamento manualmente."},
+           {tag:"Portal do Cliente", text:"o cliente anexa a NFD e o andamento é feito automaticamente."}
+         ]},
+        {name:"Devolução analisa a NFD e solicita coleta", who:"Setor de Devolução", prazo:"5 dias",
+         detail:"O setor de devolução confere a NFD e agenda a coleta da mercadoria."},
+        {name:"Sustação de título", who:"Financeiro", prazo:"5 dias",
+         detail:"O financeiro sustém a cobrança do título vinculado ao pedido em devolução."},
+        {name:"Coleta", who:"Transportadora", prazo:"15 dias", risk:true,
+         detail:"A transportadora realiza a coleta da mercadoria devolvida no endereço do cliente."},
+        {name:"Recebimento e efetivação", who:"CD Medicamental", prazo:"5 dias", end:true,
+         detail:"A devolução retorna ao CD; após conferência da nota fiscal, segue para efetivação."}
+      ]
+    },
+    {
+      id:"parcial", glyph:"◐", label:"Devolução parcial", sub:"Sac ou Portal do Cliente",
+      note:"Se o canhoto for localizado em qualquer etapa, o protocolo é finalizado e segue automaticamente para o financeiro reativar o título.",
+      steps:[
+        {name:"Abertura da devolução", who:"Sac ou Portal do Cliente", prazo:"7 dias",
+         detail:"Cliente ou atendente Sac formaliza a solicitação de devolução parcial do pedido."},
+        {name:"Emissão do espelho", who:"Sac ou Portal do Cliente", prazo:"5 dias",
+         detail:"É gerado o espelho da devolução, documento-base para a nota fiscal de devolução (NFD)."},
+        {name:"Anexar a NFD", who:"Sac ou Portal do Cliente", prazo:"5 dias",
+         detail:"A nota fiscal de devolução é anexada ao protocolo.",
+         branches:[
+           {tag:"Registro pelo Sac", text:"o atendente anexa a NFD e dá andamento manualmente."},
+           {tag:"Portal do Cliente", text:"o cliente anexa a NFD e o andamento é feito automaticamente."}
+         ]},
+        {name:"Devolução analisa a NFD e solicita coleta", who:"Setor de Devolução", prazo:"5 dias",
+         detail:"O setor de devolução confere a NFD e agenda a coleta da parte devolvida."},
+        {name:"Coleta", who:"Transportadora", prazo:"15 dias", risk:true,
+         detail:"A transportadora realiza a coleta da mercadoria devolvida no endereço do cliente."},
+        {name:"Recebimento e efetivação", who:"CD Medicamental", prazo:"5 dias", end:true,
+         detail:"A devolução retorna ao CD; após conferência da nota fiscal, segue para efetivação."}
+      ]
+    },
+    {
+      id:"recusa", glyph:"⨯", label:"Recusa no ato da entrega", sub:"Transporte / Transportadora",
+      note:"Se o canhoto for localizado em qualquer etapa, o protocolo é finalizado e segue automaticamente para o financeiro reativar o título.",
+      steps:[
+        {name:"Abertura da recusa", who:"Transporte / Transportadora", prazo:"7 dias",
+         detail:"A recusa no momento da entrega é registrada pelo transporte ou pela transportadora."},
+        {name:"Análise de canhoto", who:"Sac", prazo:"5 dias",
+         detail:"O Sac verifica se consta canhoto assinado da entrega e segue com o andamento."},
+        {name:"Sustação de título", who:"Financeiro", prazo:"5 dias",
+         detail:"O financeiro sustém a cobrança do título vinculado ao pedido recusado."},
+        {name:"Verificação de canhoto", who:"Transporte", prazo:"—", risk:true,
+         detail:"O transporte verifica se o canhoto foi localizado; caso contrário, dá andamento ao processo."},
+        {name:"Efetivação", who:"Setor de Devolução", prazo:"—", end:true,
+         detail:"O setor de devolução segue com a efetivação do processo de recusa."}
+      ]
+    },
+    {
+      id:"canhoto", glyph:"⎙", label:"Canhoto", sub:"Solicitação apenas pelo Sac",
+      note:"Se o canhoto for localizado, o financeiro reativa e finaliza o protocolo diretamente.",
+      steps:[
+        {name:"Abertura da solicitação", who:"Apenas pelo Sac", prazo:"—",
+         detail:"A solicitação de canhoto é aberta exclusivamente pelo atendimento Sac."},
+        {name:"Sustação de título", who:"Financeiro", prazo:"5 dias",
+         detail:"O financeiro sustém a cobrança do título enquanto o canhoto é localizado."},
+        {name:"Análise de canhoto", who:"Transporte", prazo:"5 dias", risk:true,
+         detail:"O transporte analisa se consta canhoto da entrega.",
+         branches:[
+           {tag:"Positivo", text:"anexa o canhoto → financeiro reativa e finaliza o protocolo (5 dias)."},
+           {tag:"Negativo", text:"dá andamento → Sac gera ordem (5 dias)."}
+         ]},
+        {name:"Efetivação", who:"Setor de Devolução", prazo:"—", end:true,
+         detail:"O setor de devolução segue com a efetivação do processo."}
+      ]
+    }
+  ];
+
+  const REASONS = [
+    ["ERRO DO CLIENTE","Comprou errado e desistência."],
+    ["MERCADORIA NÃO EXPEDIDA","Quando a mercadoria não saiu do CD, por solicitação de algum supervisor (pedido errado)."],
+    ["SOBRA DE PRODUTO","Tem canhoto assinado, porém o transporte informou que chegou um volume no CD, ou o cliente entrou em contato informando que recebeu produto sobrando e não consta na NF."],
+    ["FALTA DE PRODUTO","É sobra de quantidade pequena, até 20 unidades (tratada no mesmo protocolo que a sobra)."],
+    ["ETIQUETA TROCADA","Caixa de embarque fechada — por exemplo, 1 caixa de dipirona (60 unidades) e recebe 120 de hidroclorotiazida. Ocorre quando, dentro do volume, está tudo trocado."],
+    ["ERRO DE DIGITAÇÃO","Quantidade errada que o vendedor colocou no pedido."],
+    ["CADASTRO INCORRETO","Quando o cadastro do cliente — por exemplo, o endereço — está errado na Medicamental."],
+    ["FALTA DE VOLUME","Quando o cliente recebeu o pedido faltando volume e fez ressalva. Caso contrário, pedir filmagem e direcionar para o transporte rastrear."],
+    ["EXTRAVIO / ROUBO","Cliente recebe vários pedidos e o transportador assina a NF da Medicamental, porém não recebeu volume nenhum; título do cliente vencido e mercadoria entregue em outra drogaria com canhoto assinado. Encaminhar para o transporte rastrear. Ao dar andamento nas recusas, anexar o canhoto e finalizar."],
+    ["VALIDADE PRÓXIMA / VENCIDO","Negociação de até 3 meses de validade, ou conceder o valor como crédito de até R$ 100,00."],
+    ["ERRO DE FABRICAÇÃO","Até 2 anos, com número de protocolo junto à indústria com erro de fabricação."],
+    ["RECALL","Até 2 anos, com o lote confirmado pelo farmacêutico."],
+    ["TRANSPORTADORA — HOSPITALAR","Motivo específico vinculado à transportadora Hospitalar."],
+    ["VOLUME INCORRETO","Quando recebe o volume com etiqueta de outro distribuidor e faltou volume do cliente. Também ocorre quando se recebe volume de outra farmácia com etiqueta da Medicamental."],
+    ["DUPLICIDADE","Quando constam 2 pedidos iguais."],
+    ["LOTE INCORRETO","Foi lote errado e o cliente solicita a devolução ao invés da correção, ou foi enviado o lote de outro CD."],
+    ["CARTA DE CORREÇÃO","O cliente solicita a carta de correção em até 30 dias."],
+    ["ERRO DO DEPÓSITO","O pedido foi encaminhado para a transportadora errada."],
+    ["ATRASO","O pedido atrasou."],
+    ["NÃO SOLICITADO","Pedido gerado indevidamente pelo vendedor."],
+    ["MERCADORIA AVARIADA","Mercadoria danificada."],
+    ["DESACORDO COMERCIAL","Valor errado ou alto; reversão realizada por Medweb."],
+    ["BONIFICAÇÃO","Solicitar a coleta por e-mail."]
+  ];
+
+  // ---------- render chain of nuclei ----------
+  const chainRow = document.getElementById("chainRow");
+  PROCESSES.forEach((p, i)=>{
+    const nucleus = document.createElement("button");
+    nucleus.className = "nucleus";
+    nucleus.setAttribute("aria-expanded","false");
+    nucleus.innerHTML = `
+      <div class="bubble"><span class="glyph">${p.glyph}</span></div>
+      <div class="label">${p.label}</div>
+      <div class="sub">${p.sub}</div>
+      <div class="count">${p.steps.length} etapas</div>
+    `;
+    nucleus.addEventListener("click", ()=> toggleZone(p.id));
+    chainRow.appendChild(nucleus);
+
+    const zone = document.createElement("div");
+    zone.className = "zone";
+    zone.id = "zone-"+p.id;
+    zone.innerHTML = `<div class="zone-inner">
+      <div class="zone-head">
+        <h3>${p.label}</h3>
+        <div class="zone-flag">${p.sub}</div>
+      </div>
+      <div class="flow" id="flow-${p.id}"></div>
+      <div class="detail" id="detail-${p.id}"><div class="detail-card" id="detail-card-${p.id}"></div></div>
+      <div class="note"><b>Reativação —</b>&nbsp;${p.note}</div>
+    </div>`;
+    chainRow.appendChild(zone);
+
+    const flow = zone.querySelector(".flow");
+    p.steps.forEach((s, idx)=>{
+      if(idx>0){
+        const bond = document.createElement("div");
+        bond.className="bond";
+        flow.appendChild(bond);
+      }
+      const step = document.createElement("div");
+      step.className="step";
+      const atomCls = s.end ? "end" : (s.risk ? "risk" : "");
+      step.innerHTML = `
+        <button class="atom ${atomCls}" data-p="${p.id}" data-i="${idx}">${idx+1}</button>
+        <div class="name">${s.name}</div>
+        <div class="who">${s.who}</div>
+        ${s.prazo && s.prazo!=="—" ? `<div class="prazo">${s.prazo}</div>` : ""}
+      `;
+      flow.appendChild(step);
+    });
+  });
+
+  function toggleZone(id){
+    PROCESSES.forEach(p=>{
+      const zone = document.getElementById("zone-"+p.id);
+      const nucleus = zone.previousElementSibling;
+      const willOpen = p.id===id && !zone.classList.contains("open");
+      zone.classList.toggle("open", willOpen);
+      nucleus.setAttribute("aria-expanded", String(willOpen));
+      if(!willOpen){
+        document.getElementById("detail-"+p.id).classList.remove("open");
+      }
+    });
+  }
+
+  chainRow.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".atom");
+    if(!btn) return;
+    const pid = btn.dataset.p, idx = +btn.dataset.i;
+    const proc = PROCESSES.find(p=>p.id===pid);
+    const step = proc.steps[idx];
+    const detailWrap = document.getElementById("detail-"+pid);
+    const card = document.getElementById("detail-card-"+pid);
+    const wasActive = btn.classList.contains("active");
+
+    proc.steps.forEach((_,i)=>{
+      document.querySelector(`.atom[data-p="${pid}"][data-i="${i}"]`).classList.remove("active");
+    });
+
+    if(wasActive){
+      detailWrap.classList.remove("open");
+      return;
+    }
+    btn.classList.add("active");
+    let html = `<b>${step.name}</b> — ${step.who}${step.prazo && step.prazo!=="—" ? ` · prazo de ${step.prazo}` : ""}<br/>${step.detail}`;
+    if(step.branches){
+      html += `<div class="branches">` + step.branches.map(b=>`<div class="branch"><b>${b.tag}:</b><span>${b.text}</span></div>`).join("") + `</div>`;
+    }
+    card.innerHTML = html;
+    detailWrap.classList.add("open");
+  });
+
+  // ---------- reasons cluster ----------
+  const cluster = document.getElementById("cluster");
+  const panel = document.getElementById("reasonPanel");
+  REASONS.forEach(([title, text], i)=>{
+    const m = document.createElement("button");
+    m.className = "molecule";
+    m.innerHTML = `<span class="bump"></span>${title}`;
+    m.addEventListener("click", ()=>{
+      cluster.querySelectorAll(".molecule").forEach(x=>x.classList.remove("sel"));
+      m.classList.add("sel");
+      panel.innerHTML = `
+        <div class="rp-tag">Motivo ${String(i+1).padStart(2,"0")} / ${REASONS.length}</div>
+        <h3>${title}</h3>
+        <p>${text}</p>
+      `;
+    });
+    cluster.appendChild(m);
+  });
+})();
+</script>
