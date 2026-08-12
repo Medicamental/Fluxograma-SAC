@@ -114,7 +114,12 @@
   .nav-item .ni-dot{width:6px;height:6px;border-radius:50%;background:var(--text-faint);flex:none;}
   .nav-item.active .ni-dot{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
   .nav-item .ni-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .nav-item .ni-count{flex:none;min-width:18px;text-align:right;font-size:10.5px;color:var(--text-faint);font-family:ui-monospace,monospace;}
+  .nav-item .ni-count{
+    flex:none;text-align:center;font-size:10px;color:var(--text-faint);font-family:ui-monospace,monospace;
+    background:var(--surface-2);border:1px solid var(--border-soft);border-radius:100px;
+    min-width:22px;padding:2px 6px;line-height:1.4;
+  }
+  .nav-item.active .ni-count{color:var(--text-dim);border-color:var(--border);}
   .nav-item.catalog .ni-dot{background:var(--violet);border-radius:2px;}
 
   .sidebar-gap{flex:1;min-height:16px;}
@@ -201,20 +206,25 @@
   .node.step .card{border-left:2px solid var(--border);}
 
   .node.decision .card{
-    background:var(--surface); border-radius:var(--radius-m); border:1px solid var(--border);
+    background:transparent; border:none; box-shadow:none; overflow:hidden;
     display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 16px;
   }
+  .node.decision:hover .card, .node.decision.selected .card{background:transparent;}
   .node.decision .diamond-bg{
-    position:absolute;inset:6px;background:var(--surface-2);border:1px solid rgba(217,169,79,.35);
-    transform:rotate(45deg);border-radius:6px;z-index:0;
+    /* Um quadrado rotacionado 45° tem diagonal = lado × 1.41 — por isso o
+       inset precisa ser generoso, senão o losango "vaza" da própria caixa
+       e sobrepõe os nós vizinhos. Com a caixa de 150px, inset:30px deixa
+       o losango com diagonal ~127px, com folga segura dentro do limite. */
+    position:absolute;inset:30px;background:var(--surface-2);border:1px solid rgba(217,169,79,.35);
+    transform:rotate(45deg);border-radius:6px;z-index:0;box-shadow:var(--shadow-1);
   }
   .node.decision .d-content{position:relative;z-index:1;}
   .node.decision .c-icon{margin:0 auto 6px;color:var(--amber);background:var(--amber-soft);}
   .node.decision .c-title{
     font-size:11.5px;font-weight:700;line-height:1.32;-webkit-line-clamp:4;margin:0;
   }
-  .node.decision:hover .card{border-color:rgba(217,169,79,.4);}
-  .node.decision.selected .card{box-shadow:0 0 0 3px var(--amber-soft);}
+  .node.decision:hover .diamond-bg{border-color:rgba(217,169,79,.55);}
+  .node.decision.selected .diamond-bg{box-shadow:0 0 0 3px var(--amber-soft), var(--shadow-1);}
 
   .node.start .card, .node.end .card{
     display:flex;align-items:center;gap:9px;border-radius:100px;padding:9px 16px;
@@ -442,28 +452,28 @@
         {id:"t6", type:"step", title:"Coleta", tag:"Logística", owner:"Transportadora",
          desc:"A transportadora realiza a coleta da mercadoria devolvida no endereço do cliente.",
          guidance:"Acompanhe o prazo de coleta junto à transportadora; atrasos devem ser registrados.",
-         prazo:"15 dias", col:5, row:0},
+         prazo:"15 dias", col:4, row:2},
         {id:"t7", type:"decision", title:"Canhoto foi localizado durante o processo?", tag:"Decisão", owner:"Sac / Financeiro",
          desc:"Em qualquer etapa anterior, verifica-se se o canhoto assinado da entrega foi localizado.",
          guidance:"Sempre que o canhoto for localizado, priorize o encerramento do protocolo e a reativação do título.",
-         col:6, row:0},
+         col:3, row:2},
         {id:"t8", type:"redirect", title:"Financeiro reativa o título", tag:"Direcionamento", owner:"Financeiro",
          desc:"O canhoto localizado é anexado ao protocolo e o financeiro reativa a cobrança do título.",
-         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:6, row:1},
+         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:3, row:3},
         {id:"t9", type:"end", title:"Protocolo reativado e finalizado", tag:"Encerramento", owner:"Financeiro",
-         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:7, row:1},
+         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:2, row:3},
         {id:"t10", type:"step", title:"Recebimento no CD", tag:"Logística", owner:"CD Medicamental",
          desc:"A devolução retorna ao CD e passa por conferência da nota fiscal.",
          guidance:"Confira quantidade e integridade dos itens recebidos antes de liberar a efetivação.",
-         prazo:"5 dias", col:7, row:0},
+         prazo:"5 dias", col:2, row:2},
         {id:"t11", type:"end", title:"Efetivação da devolução", tag:"Encerramento", owner:"Setor de Devolução",
-         desc:"Após a conferência, a devolução total é efetivada no sistema.", col:8, row:0}
+         desc:"Após a conferência, a devolução total é efetivada no sistema.", col:1, row:2}
       ],
       edges:[
         {from:"t1",to:"t2"},{from:"t2",to:"t3"},{from:"t3",to:"t4"},{from:"t4",to:"t5"},
-        {from:"t5",to:"t6"},{from:"t6",to:"t7"},
-        {from:"t7",to:"t8",dir:"down",label:"SIM"},{from:"t8",to:"t9"},
-        {from:"t7",to:"t10",label:"NÃO"},{from:"t10",to:"t11"}
+        {from:"t5",to:"t6",dir:"down"},{from:"t6",to:"t7",dir:"left"},
+        {from:"t7",to:"t8",dir:"down",label:"SIM"},{from:"t8",to:"t9",dir:"left"},
+        {from:"t7",to:"t10",dir:"left",label:"NÃO"},{from:"t10",to:"t11",dir:"left"}
       ]
     },
     {
@@ -488,27 +498,28 @@
         {id:"p5", type:"step", title:"Coleta", tag:"Logística", owner:"Transportadora",
          desc:"A transportadora realiza a coleta da mercadoria devolvida no endereço do cliente.",
          guidance:"Acompanhe o prazo de coleta junto à transportadora; atrasos devem ser registrados.",
-         prazo:"15 dias", col:4, row:0},
+         prazo:"15 dias", col:3, row:2},
         {id:"p6", type:"decision", title:"Canhoto foi localizado durante o processo?", tag:"Decisão", owner:"Sac / Financeiro",
          desc:"Em qualquer etapa anterior, verifica-se se o canhoto assinado da entrega foi localizado.",
          guidance:"Sempre que o canhoto for localizado, priorize o encerramento do protocolo e a reativação do título.",
-         col:5, row:0},
+         col:2, row:2},
         {id:"p7", type:"redirect", title:"Financeiro reativa o título", tag:"Direcionamento", owner:"Financeiro",
          desc:"O canhoto localizado é anexado ao protocolo e o financeiro reativa a cobrança do título.",
-         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:5, row:1},
+         guidance:"Anexe o canhoto ao protocolo antes de solicitar a reativação.", col:2, row:3},
         {id:"p8", type:"end", title:"Protocolo reativado e finalizado", tag:"Encerramento", owner:"Financeiro",
-         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:6, row:1},
+         desc:"O protocolo é finalizado com o título reativado — a devolução não é efetivada.", col:1, row:3},
         {id:"p9", type:"step", title:"Recebimento no CD", tag:"Logística", owner:"CD Medicamental",
          desc:"A devolução retorna ao CD e passa por conferência da nota fiscal.",
          guidance:"Confira quantidade e integridade dos itens recebidos antes de liberar a efetivação.",
-         prazo:"5 dias", col:6, row:0},
+         prazo:"5 dias", col:1, row:2},
         {id:"p10", type:"end", title:"Efetivação da devolução", tag:"Encerramento", owner:"Setor de Devolução",
-         desc:"Após a conferência, a devolução parcial é efetivada no sistema.", col:7, row:0}
+         desc:"Após a conferência, a devolução parcial é efetivada no sistema.", col:0, row:2}
       ],
       edges:[
-        {from:"p1",to:"p2"},{from:"p2",to:"p3"},{from:"p3",to:"p4"},{from:"p4",to:"p5"},{from:"p5",to:"p6"},
-        {from:"p6",to:"p7",dir:"down",label:"SIM"},{from:"p7",to:"p8"},
-        {from:"p6",to:"p9",label:"NÃO"},{from:"p9",to:"p10"}
+        {from:"p1",to:"p2"},{from:"p2",to:"p3"},{from:"p3",to:"p4"},
+        {from:"p4",to:"p5",dir:"down"},{from:"p5",to:"p6",dir:"left"},
+        {from:"p6",to:"p7",dir:"down",label:"SIM"},{from:"p7",to:"p8",dir:"left"},
+        {from:"p6",to:"p9",dir:"left",label:"NÃO"},{from:"p9",to:"p10",dir:"left"}
       ]
     },
     {
@@ -746,15 +757,19 @@
       const from = proc.nodes.find(n=>n.id===e.from);
       const to = proc.nodes.find(n=>n.id===e.to);
       const isDown = e.dir === "down";
-      const a = anchor(from, isDown ? "bottom" : "right");
-      const b = anchor(to, isDown ? "top" : "left");
+      const isLeft = e.dir === "left";
+      const a = anchor(from, isDown ? "bottom" : (isLeft ? "left" : "right"));
+      const b = anchor(to, isDown ? "top" : (isLeft ? "right" : "left"));
       let d;
       if(isDown){
         const dy = Math.max(28, (b.y-a.y)/2);
         d = `M ${a.x} ${a.y} C ${a.x} ${a.y+dy}, ${b.x} ${b.y-dy}, ${b.x} ${b.y}`;
       } else {
-        const dx = Math.max(28, (b.x-a.x)/2);
-        d = `M ${a.x} ${a.y} C ${a.x+dx} ${a.y}, ${b.x-dx} ${b.y}, ${b.x} ${b.y}`;
+        // sign inverte o sentido das curvas de controle quando o fluxo
+        // volta da direita para a esquerda (segunda linha da serpentina).
+        const sign = isLeft ? -1 : 1;
+        const dx = Math.max(28, Math.abs(b.x-a.x)/2);
+        d = `M ${a.x} ${a.y} C ${a.x+sign*dx} ${a.y}, ${b.x-sign*dx} ${b.y}, ${b.x} ${b.y}`;
       }
       const path = document.createElementNS("http://www.w3.org/2000/svg","path");
       path.setAttribute("d", d);
