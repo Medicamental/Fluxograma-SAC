@@ -105,8 +105,8 @@
   }
   .nav-list{flex:none;padding:0 12px 6px 12px;overflow:visible;}
   .nav-item{
-    all:unset;display:flex;align-items:center;gap:10px;width:100%;padding:10px 10px 10px 12px;border-radius:var(--radius-s);
-    cursor:pointer;color:var(--text-dim);font-size:13px;font-weight:500;margin-bottom:2px;
+    all:unset;display:flex;align-items:center;gap:12px;width:100%;padding:13px 12px;border-radius:var(--radius-s);
+    cursor:pointer;color:var(--text-dim);font-size:13px;font-weight:500;margin-bottom:8px;
     transition:background .15s, color .15s;
   }
   .nav-item:hover{background:var(--surface);color:var(--text);}
@@ -117,7 +117,7 @@
   .nav-item .ni-count{
     flex:none;text-align:center;font-size:10px;color:var(--text-faint);font-family:ui-monospace,monospace;
     background:var(--surface-2);border:1px solid var(--border-soft);border-radius:100px;
-    min-width:22px;padding:2px 6px;line-height:1.4;
+    min-width:24px;padding:3px 7px;line-height:1.4;
   }
   .nav-item.active .ni-count{color:var(--text-dim);border-color:var(--border);}
   .nav-item.catalog .ni-dot{background:var(--violet);border-radius:2px;}
@@ -206,17 +206,16 @@
   .node.step .card{border-left:2px solid var(--border);}
 
   .node.decision .card{
-    background:transparent; border:none; box-shadow:none; overflow:hidden;
-    display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 16px;
+    background:transparent; border:none; box-shadow:none; overflow:visible;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 18px;
   }
   .node.decision:hover .card, .node.decision.selected .card{background:transparent;}
   .node.decision .diamond-bg{
-    /* Um quadrado rotacionado 45° tem diagonal = lado × 1.41 — por isso o
-       inset precisa ser generoso, senão o losango "vaza" da própria caixa
-       e sobrepõe os nós vizinhos. Com a caixa de 150px, inset:30px deixa
-       o losango com diagonal ~127px, com folga segura dentro do limite. */
-    position:absolute;inset:30px;background:var(--surface-2);border:1px solid rgba(217,169,79,.35);
-    transform:rotate(45deg);border-radius:6px;z-index:0;box-shadow:var(--shadow-1);
+    /* clip-path corta exatamente nos limites da própria caixa — diferente de um
+       quadrado rotacionado (cuja diagonal é 41% maior que o lado e "vaza" para
+       fora), este losango nunca pode ultrapassar a área reservada ao nó. */
+    position:absolute;inset:0;background:var(--surface-2);border:1px solid rgba(217,169,79,.35);
+    clip-path:polygon(50% 2%, 98% 50%, 50% 98%, 2% 50%);z-index:0;
   }
   .node.decision .d-content{position:relative;z-index:1;}
   .node.decision .c-icon{margin:0 auto 6px;color:var(--amber);background:var(--amber-soft);}
@@ -641,9 +640,9 @@
      LAYOUT — grid (col,row) → pixels, largura/altura calculadas por
      coluna/linha (evita qualquer sobreposição entre tipos de nó distintos)
      ===================================================================== */
-  const COL_GAP = 46, ROW_GAP = 40, PAD = 40;
+  const COL_GAP = 72, ROW_GAP = 68, PAD = 48;
   const SIZE = {
-    start:{w:152,h:44}, end:{w:152,h:44}, step:{w:172,h:98}, redirect:{w:172,h:92}, decision:{w:150,h:150}
+    start:{w:152,h:44}, end:{w:152,h:44}, step:{w:172,h:98}, redirect:{w:172,h:92}, decision:{w:136,h:136}
   };
 
   function layoutNodes(proc){
